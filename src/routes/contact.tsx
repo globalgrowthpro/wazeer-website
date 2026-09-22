@@ -23,9 +23,9 @@ export const Route = createFileRoute("/contact")({
 });
 
 const info = [
-  { icon: Phone, label: "الهاتف", value: "+20 122 228 1651" },
-  { icon: MessageCircle, label: "واتساب", value: "+20 122 228 1651" },
-  { icon: Mail, label: "البريد الإلكتروني", value: "info@wazeerelhelw.com" },
+  { icon: Phone, label: "الهاتف", value: "+20 122 228 1651", ltr: true },
+  { icon: MessageCircle, label: "واتساب", value: "+20 122 228 1651", ltr: true },
+  { icon: Mail, label: "البريد الإلكتروني", value: "info@wazeerelhelw.com", ltr: true },
   { icon: MapPin, label: "العنوان", value: "موقف الخصوص، القليوبية، مصر" },
   { icon: Clock, label: "مواعيد العمل", value: "يومياً من 9 صباحاً حتى 1 بعد منتصف الليل" },
 ];
@@ -55,7 +55,13 @@ function ContactPage() {
                   </span>
                   <div>
                     <p className="text-xs font-semibold text-muted-foreground">{i.label}</p>
-                    <p className="text-sm font-bold text-brand">{i.value}</p>
+                    {i.ltr ? (
+                      <p className="text-right text-sm font-bold text-brand">
+                        <span dir="ltr">{i.value}</span>
+                      </p>
+                    ) : (
+                      <p className="text-sm font-bold text-brand">{i.value}</p>
+                    )}
                   </div>
                 </div>
               ))}
@@ -67,7 +73,9 @@ function ContactPage() {
                 <div key={b.name} className="rounded-2xl bg-muted p-4">
                   <p className="font-bold text-brand">{b.name}</p>
                   <p className="mt-1 text-sm text-muted-foreground">{b.address}</p>
-                  <p className="text-sm text-muted-foreground">{b.phone}</p>
+                  <p className="text-sm text-muted-foreground">
+                    <span dir="ltr">{b.phone}</span>
+                  </p>
                 </div>
               ))}
             </div>

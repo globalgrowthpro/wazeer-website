@@ -29,7 +29,7 @@ export function SiteHeader() {
               <Mail className="size-3.5" /> info@wazeerelhelw.com
             </a>
             <a href="tel:+201222281651" className="flex items-center gap-1.5 hover:text-gold">
-              <Phone className="size-3.5" /> +20 122 228 1651
+              <Phone className="size-3.5" /> <span dir="ltr">+20 122 228 1651</span>
             </a>
             <span className="flex items-center gap-3">
               <Facebook className="size-3.5" />
