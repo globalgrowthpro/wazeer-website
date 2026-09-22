@@ -20,7 +20,9 @@ export function SiteFooter() {
     <footer className="brand-gradient mt-16 text-brand-foreground">
       <div className="container-page grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-4">
         <div>
-          <Logo light />
+          <span className="inline-block rounded-2xl bg-white px-3 py-1.5">
+            <Logo light />
+          </span>
           <p className="mt-4 text-sm leading-7 text-brand-foreground/80">
             وزير الحلو — أشهى الحلويات الشرقية والغربية والمأكولات الطازجة، محضّرة يومياً بأجود
             المكونات وبأسعار تناسب الجميع.
