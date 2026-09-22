@@ -37,11 +37,26 @@ export function SiteHeader() {
             </span>
           </div>
           <div className="flex items-center gap-4">
+            <Link to="/admin" className="hover:text-gold">
+              لوحة الإدارة
+            </Link>
+            <Link to="/driver" className="hover:text-gold">
+              لوحة المندوب
+            </Link>
+            <span className="opacity-50">|</span>
             <Link to="/cart" className="hover:text-gold">
               السلة ({count})
             </Link>
             <span className="opacity-50">|</span>
-            <span className="hover:text-gold">تسجيل الدخول / حساب جديد</span>
+            {user ? (
+              <Link to="/account" className="hover:text-gold">
+                حسابي ({user.name})
+              </Link>
+            ) : (
+              <Link to="/auth" className="hover:text-gold">
+                تسجيل الدخول / حساب جديد
+              </Link>
+            )}
           </div>
         </div>
       </div>
