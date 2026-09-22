@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import { categories, products } from "@/data/menu";
 
-type MenuSearch = { cat: string | undefined; q: string | undefined };
+type MenuSearch = { cat?: string | undefined; q?: string | undefined };
 
 export const Route = createFileRoute("/menu")({
   validateSearch: (search: Record<string, unknown>): MenuSearch => ({
