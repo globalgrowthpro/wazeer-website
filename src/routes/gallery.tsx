@@ -31,12 +31,12 @@ const filters = [
 
 const images = [
   { src: heroCake, group: "sweets", alt: "كنافة بالشوكولاتة" },
-  { src: categories[0].image, group: "sweets", alt: "قشطوطة" },
-  { src: categories[1].image, group: "sweets", alt: "آيس كريم" },
-  { src: categories[2].image, group: "cake", alt: "كيك شوكولاتة" },
-  { src: categories[3].image, group: "sweets", alt: "حلويات شرقية" },
-  { src: categories[4].image, group: "sweets", alt: "أطباق رئيسية" },
-  { src: categories[5].image, group: "drinks", alt: "مشروبات" },
+  { src: categories[0]!.image, group: "sweets", alt: "قشطوطة" },
+  { src: categories[1]!.image, group: "sweets", alt: "آيس كريم" },
+  { src: categories[2]!.image, group: "cake", alt: "كيك شوكولاتة" },
+  { src: categories[3]!.image, group: "sweets", alt: "حلويات شرقية" },
+  { src: categories[4]!.image, group: "sweets", alt: "أطباق رئيسية" },
+  { src: categories[5]!.image, group: "drinks", alt: "مشروبات" },
   { src: aboutStore, group: "branches", alt: "فرع وزير الحلو" },
   { src: heroCake, group: "cake", alt: "كيك مميز" },
 ];

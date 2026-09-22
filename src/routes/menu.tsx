@@ -13,12 +13,12 @@ import {
 } from "@/components/ui/select";
 import { categories, products } from "@/data/menu";
 
-type Search = { cat?: string; q?: string };
+type MenuSearch = { cat: string | undefined; q: string | undefined };
 
 export const Route = createFileRoute("/menu")({
-  validateSearch: (search: Record<string, unknown>): Search => ({
-    cat: typeof search.cat === "string" ? search.cat : undefined,
-    q: typeof search.q === "string" ? search.q : undefined,
+  validateSearch: (search: Record<string, unknown>): MenuSearch => ({
+    cat: typeof search["cat"] === "string" ? (search["cat"] as string) : undefined,
+    q: typeof search["q"] === "string" ? (search["q"] as string) : undefined,
   }),
   head: () => ({
     meta: [
@@ -49,8 +49,8 @@ function MenuPage() {
     return items;
   }, [cat, q, sort]);
 
-  const setCat = (value?: string) =>
-    navigate({ search: (prev) => ({ ...prev, cat: value }) });
+  const setCat = (value: string | undefined) =>
+    navigate({ search: (prev): MenuSearch => ({ q: prev.q, cat: value }) });
 
   return (
     <>
@@ -64,7 +64,9 @@ function MenuPage() {
               <Input
                 value={q ?? ""}
                 onChange={(e) =>
-                  navigate({ search: (prev) => ({ ...prev, q: e.target.value || undefined }) })
+                  navigate({
+                    search: (prev): MenuSearch => ({ cat: prev.cat, q: e.target.value || undefined }),
+                  })
                 }
                 placeholder="ابحث عن قشطوطة، كيك، آيس كريم..."
                 className="h-11 ps-9"

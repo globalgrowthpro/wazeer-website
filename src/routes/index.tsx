@@ -68,6 +68,7 @@ const testimonials = [
 
 function Home() {
   const [slide, setSlide] = useState(0);
+  const current = slides[slide] ?? slides[0]!;
 
   useEffect(() => {
     const t = setInterval(() => setSlide((s) => (s + 1) % slides.length), 6000);
@@ -81,13 +82,13 @@ function Home() {
         <div className="container-page grid items-center gap-8 py-10 md:grid-cols-2 md:py-16">
           <div className="order-2 text-center md:order-1 md:text-start">
             <h1 className="text-3xl leading-tight md:text-5xl lg:text-6xl">
-              {slides[slide].title.split(" ").slice(0, 2).join(" ")}{" "}
+              {current.title.split(" ").slice(0, 2).join(" ")}{" "}
               <span className="text-gradient-gold">
-                {slides[slide].title.split(" ").slice(2).join(" ")}
+                {current.title.split(" ").slice(2).join(" ")}
               </span>
             </h1>
             <p className="mx-auto mt-4 max-w-md text-sm text-brand-foreground/85 md:mx-0 md:text-lg">
-              {slides[slide].subtitle}
+              {current.subtitle}
             </p>
             <div className="mt-7 flex flex-wrap justify-center gap-3 md:justify-start">
               <Button asChild variant="hero" size="pill">
