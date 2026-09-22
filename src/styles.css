@@ -180,8 +180,8 @@
   .heading-underline::after {
     content: "";
     position: absolute;
-    inset-inline-start: 50%;
-    transform: translateX(50%);
+    inset-inline: 0;
+    margin-inline: auto;
     bottom: 0;
     width: 64px;
     height: 4px;
