@@ -16,7 +16,7 @@ export const Route = createFileRoute("/admin/products")({
       { property: "og:description", content: "تحكم في الأصناف والأسعار." },
     ],
   }),
-  component: AdminProducts;
+  component: AdminProducts,
 });
 
 function AdminProducts() {
