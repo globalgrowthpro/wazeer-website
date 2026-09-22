@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useCart } from "@/lib/cart";
+import { useAuth } from "@/lib/auth";
 
 const navLinks = [
   { to: "/", label: "الرئيسية" },
@@ -18,6 +19,7 @@ const navLinks = [
 
 export function SiteHeader() {
   const { count } = useCart();
+  const { user } = useAuth();
   const [searchOpen, setSearchOpen] = useState(false);
 
   return (
