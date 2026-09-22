@@ -17,7 +17,7 @@ export interface Order {
   status: OrderStatus;
   payment: string;
   createdAt: string;
-  driverId?: string;
+  driverId?: string | undefined;
   lines: OrderLine[];
 }
 
