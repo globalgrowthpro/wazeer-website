@@ -63,7 +63,7 @@ export function SiteFooter() {
           <h3 className="text-base font-bold text-gold">تواصل معنا</h3>
           <ul className="mt-4 space-y-3 text-sm text-brand-foreground/80">
             <li className="flex items-center gap-2">
-              <Phone className="size-4 text-gold" /> +20 122 228 1651
+              <Phone className="size-4 text-gold" /> <span dir="ltr">+20 122 228 1651</span>
             </li>
             <li className="flex items-center gap-2">
               <Mail className="size-4 text-gold" /> info@wazeerelhelw.com
