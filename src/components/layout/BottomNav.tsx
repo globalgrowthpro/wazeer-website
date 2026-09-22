@@ -7,7 +7,7 @@ const items = [
   { to: "/menu", label: "المنتجات", icon: LayoutGrid, exact: false },
   { to: "/cart", label: "السلة", icon: ShoppingCart, exact: false },
   { to: "/gallery", label: "المعرض", icon: Images, exact: false },
-  { to: "/contact", label: "حسابي", icon: User, exact: false },
+  { to: "/account", label: "حسابي", icon: User, exact: false },
 ] as const;
 
 export function BottomNav() {

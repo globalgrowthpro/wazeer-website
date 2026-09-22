@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useCart } from "@/lib/cart";
+import { useAuth } from "@/lib/auth";
 
 const navLinks = [
   { to: "/", label: "الرئيسية" },
@@ -18,6 +19,7 @@ const navLinks = [
 
 export function SiteHeader() {
   const { count } = useCart();
+  const { user } = useAuth();
   const [searchOpen, setSearchOpen] = useState(false);
 
   return (
@@ -37,11 +39,26 @@ export function SiteHeader() {
             </span>
           </div>
           <div className="flex items-center gap-4">
+            <Link to="/admin" className="hover:text-gold">
+              لوحة الإدارة
+            </Link>
+            <Link to="/driver" className="hover:text-gold">
+              لوحة المندوب
+            </Link>
+            <span className="opacity-50">|</span>
             <Link to="/cart" className="hover:text-gold">
               السلة ({count})
             </Link>
             <span className="opacity-50">|</span>
-            <span className="hover:text-gold">تسجيل الدخول / حساب جديد</span>
+            {user ? (
+              <Link to="/account" className="hover:text-gold">
+                حسابي ({user.name})
+              </Link>
+            ) : (
+              <Link to="/auth" className="hover:text-gold">
+                تسجيل الدخول / حساب جديد
+              </Link>
+            )}
           </div>
         </div>
       </div>
@@ -110,8 +127,10 @@ export function SiteHeader() {
                 )}
               </Link>
             </Button>
-            <Button variant="ghost" size="icon" className="hidden sm:inline-flex" aria-label="حسابي">
-              <User />
+            <Button variant="ghost" size="icon" className="hidden sm:inline-flex" asChild aria-label="حسابي">
+              <Link to={user ? "/account" : "/auth"}>
+                <User />
+              </Link>
             </Button>
             <Button asChild variant="hero" className="hidden sm:inline-flex" size="default">
               <Link to="/menu">اطلب الآن</Link>

@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { CartProvider } from "@/lib/cart";
+import { AuthProvider } from "@/lib/auth";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { BottomNav } from "@/components/layout/BottomNav";
@@ -135,18 +136,20 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CartProvider>
-        <div className="flex min-h-screen flex-col">
-          <SiteHeader />
-          <main className="flex-1 pb-20 lg:pb-0">
-            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-            <Outlet />
-          </main>
-          <SiteFooter />
-          <BottomNav />
-        </div>
-        <Toaster position="top-center" richColors />
-      </CartProvider>
+      <AuthProvider>
+        <CartProvider>
+          <div className="flex min-h-screen flex-col">
+            <SiteHeader />
+            <main className="flex-1 pb-20 lg:pb-0">
+              {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+              <Outlet />
+            </main>
+            <SiteFooter />
+            <BottomNav />
+          </div>
+          <Toaster position="top-center" richColors />
+        </CartProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

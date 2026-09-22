@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
-import { toast } from "sonner";
 import { PageHero } from "@/components/PageHero";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/cart";
@@ -114,13 +113,8 @@ function CartPage() {
                     <dd className="font-extrabold text-primary">{subtotal + delivery} ج.م</dd>
                   </div>
                 </dl>
-                <Button
-                  variant="hero"
-                  size="lg"
-                  className="mt-5 w-full"
-                  onClick={() => toast.success("سيتم تفعيل إتمام الطلب قريبًا")}
-                >
-                  إتمام الطلب
+                <Button asChild variant="hero" size="lg" className="mt-5 w-full">
+                  <Link to="/checkout">إتمام الطلب</Link>
                 </Button>
                 <Button asChild variant="outline" size="lg" className="mt-2 w-full">
                   <Link to="/menu">متابعة التسوق</Link>
