@@ -127,8 +127,10 @@ export function SiteHeader() {
                 )}
               </Link>
             </Button>
-            <Button variant="ghost" size="icon" className="hidden sm:inline-flex" aria-label="حسابي">
-              <User />
+            <Button variant="ghost" size="icon" className="hidden sm:inline-flex" asChild aria-label="حسابي">
+              <Link to={user ? "/account" : "/auth"}>
+                <User />
+              </Link>
             </Button>
             <Button asChild variant="hero" className="hidden sm:inline-flex" size="default">
               <Link to="/menu">اطلب الآن</Link>
