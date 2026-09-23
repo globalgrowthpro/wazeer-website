@@ -14,10 +14,31 @@ export interface Category {
   count: number;
 }
 
+export interface ProductIngredient {
+  name: string;
+  quantity?: string;
+}
+
+export interface SizePricing {
+  suffix: string;  // S | M | L | XL
+  label: string;
+  priceOffset: number;
+}
+
+export interface NutritionFacts {
+  calories: string;
+  fat: string;
+  carbs: string;
+  protein: string;
+  sugar: string;
+  fiber: string;
+}
+
 export interface Product {
   id: string;
   name: string;
   description: string;
+  longDescription?: string;
   price: number;
   oldPrice?: number;
   rating: number;
@@ -26,6 +47,14 @@ export interface Product {
   image: string;
   badge?: string;
   popular?: boolean;
+  servesCount?: string;
+  minOrderQty?: number;
+  preparationInfo?: string;
+  ingredients?: ProductIngredient[];
+  sizePricing?: SizePricing[];
+  nutrition?: NutritionFacts;
+  storageInfo?: string;
+  servingInfo?: string;
 }
 
 export const categories: Category[] = [
@@ -72,10 +101,12 @@ export const products: Product[] = [
     name: "كيك شوكولاتة",
     description: "طبقات كيك شوكولاتة غنية بالكريمة",
     price: 120,
+    oldPrice: 150,
     rating: 4.9,
     reviews: 302,
     category: "cake",
     image: cake,
+    badge: "خصم 20%",
     popular: true,
   },
   {
@@ -83,10 +114,12 @@ export const products: Product[] = [
     name: "كنافة بالفستق",
     description: "كنافة مقرمشة محشوة بالفستق الحلبي",
     price: 110,
+    oldPrice: 135,
     rating: 4.8,
     reviews: 187,
     category: "oriental",
     image: oriental,
+    badge: "عرض خاص",
     popular: true,
   },
   {

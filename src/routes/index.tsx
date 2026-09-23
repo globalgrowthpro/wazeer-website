@@ -1,17 +1,23 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
+  ArrowLeft,
   Award,
   ChevronLeft,
   ChevronRight,
   Clock,
+  Flame,
   MapPin,
   Sparkles,
   Star,
+  Tag,
   Truck,
   Wallet,
 } from "lucide-react";
 import heroCake from "@/assets/hero-cake.jpg";
+import keshtota from "@/assets/cat-keshtota.jpg";
+import icecream from "@/assets/cat-icecream.jpg";
+import oriental from "@/assets/cat-oriental.jpg";
 import { Button } from "@/components/ui/button";
 import { SectionHeading } from "@/components/SectionHeading";
 import { ProductCard } from "@/components/ProductCard";
@@ -40,14 +46,34 @@ const slides = [
   {
     title: "الحلو دايمًا بمزاجك",
     subtitle: "أشهى الحلويات والمأكولات من وزير الحلو",
+    image: heroCake,
+    alt: "كنافة بالشوكولاتة والفستق من وزير الحلو",
+    link: "/menu",
+    badge: "الأكثر طلباً",
   },
   {
-    title: "كنافة وقشطوطة طازة",
-    subtitle: "تُحضَّر يومياً بأجود المكونات في كل فروعنا",
+    title: "قشطوطة وزير الأصلية",
+    subtitle: "طبقات الحليب والكراميل والمكسرات الفاخرة بطعم لا يقاوم",
+    image: keshtota,
+    alt: "قشطوطة وزير الحلو الأصلية",
+    link: "/menu?cat=keshtota",
+    badge: "عرض خاص",
   },
   {
-    title: "توصيل سريع لباب بيتك",
-    subtitle: "اطلب الآن واستمتع بطلبك في أسرع وقت",
+    title: "آيس كريم بنكهات لا تُقاوم",
+    subtitle: "برودة الصيف في كوب — كريمة طازجة وفواكه يومياً",
+    image: icecream,
+    alt: "آيس كريم وزير الحلو",
+    link: "/menu?cat=icecream",
+    badge: "جديد",
+  },
+  {
+    title: "حلويات شرقية أصيلة",
+    subtitle: "كنافة وبسبوسة وكل ما تشتهيه من أصالة الحلوى المصرية",
+    image: oriental,
+    alt: "حلويات شرقية وزير الحلو",
+    link: "/menu?cat=oriental",
+    badge: "الأكثر مبيعاً",
   },
 ];
 
@@ -130,12 +156,17 @@ function Home() {
             <div className="relative mx-auto aspect-square w-full max-w-md">
               <div className="absolute inset-0 rounded-full bg-gold/25 blur-3xl" />
               <img
-                src={heroCake}
-                alt="كنافة بالشوكولاتة والفستق من وزير الحلو"
+                key={slide}
+                src={current.image}
+                alt={current.alt}
                 width={1200}
                 height={1200}
-                className="relative h-full w-full rounded-full border-4 border-gold/70 object-cover shadow-[var(--shadow-float)]"
+                className="relative h-full w-full rounded-full border-4 border-gold/70 object-cover shadow-[var(--shadow-float)] transition-all duration-700 ease-in-out animate-in fade-in zoom-in-95"
               />
+              {/* Badge */}
+              <span className="absolute right-4 top-4 rounded-full bg-gold px-3 py-1 text-xs font-bold text-gold-foreground shadow-lg animate-in fade-in slide-in-from-top-2 duration-500">
+                {current.badge}
+              </span>
             </div>
           </div>
         </div>
@@ -174,41 +205,202 @@ function Home() {
         </div>
       </section>
 
-      {/* Offers */}
-      <section className="section-y bg-muted">
-        <div className="container-page">
-          <SectionHeading title="أحدث العروض" subtitle="استمتع بأفضل الأسعار على أشهى الأصناف" />
-          <div className="grid gap-5 md:grid-cols-2">
-            {offers.slice(0, 2).map((o) => (
-              <div
-                key={o.id}
-                className="flex overflow-hidden rounded-2xl bg-card shadow-[var(--shadow-card)]"
-              >
-                <img
-                  src={o.image}
-                  alt={o.name}
-                  loading="lazy"
-                  width={816}
-                  height={816}
-                  className="h-40 w-36 shrink-0 object-cover md:h-48 md:w-52"
-                />
-                <div className="flex flex-1 flex-col justify-center gap-2 p-4">
-                  <span className="w-fit rounded-full bg-gold px-3 py-1 text-[11px] font-bold text-gold-foreground">
-                    {o.badge}
-                  </span>
-                  <h3 className="text-lg font-extrabold text-brand md:text-xl">{o.name}</h3>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-xl font-extrabold text-primary">{o.price} ج.م</span>
-                    <span className="text-sm text-muted-foreground line-through">
-                      {o.oldPrice} ج.م
-                    </span>
+      {/* ── Offers ───────────────────────────────────────────────────────── */}
+      <section className="section-y relative overflow-hidden bg-muted">
+        {/* Decorative background blobs */}
+        <div className="pointer-events-none absolute -top-24 end-0 size-96 rounded-full bg-primary/5 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-24 start-0 size-72 rounded-full bg-gold/10 blur-3xl" />
+
+        <div className="container-page relative">
+          <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <span className="mb-2 flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-primary">
+                <Flame className="size-3.5" /> عروض حصرية
+              </span>
+              <h2 className="text-2xl font-black text-brand md:text-3xl">أحدث العروض</h2>
+              <p className="mt-1 text-sm text-muted-foreground">استمتع بأفضل الأسعار على أشهى الأصناف</p>
+            </div>
+            <Button asChild variant="outline" size="sm">
+              <Link to="/menu">عرض كل العروض <ArrowLeft className="size-3.5" /></Link>
+            </Button>
+          </div>
+
+          {/* Top row: 3 cards */}
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {offers.slice(0, 3).map((o) => {
+              const savePct = o.oldPrice
+                ? Math.round(((o.oldPrice - o.price) / o.oldPrice) * 100)
+                : 0;
+              return (
+                <Link
+                  key={o.id}
+                  to="/products/$id"
+                  params={{ id: o.id }}
+                  className="group relative flex h-64 overflow-hidden rounded-3xl shadow-[var(--shadow-card)] transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl sm:h-72"
+                >
+                  {/* Full-bleed image */}
+                  <img
+                    src={o.image}
+                    alt={o.name}
+                    loading="lazy"
+                    width={800}
+                    height={600}
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+
+                  {/* Shimmer sweep on hover */}
+                  <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+
+                  {/* Gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/50 to-transparent" />
+
+                  {/* Content */}
+                  <div className="relative flex h-full w-full flex-col justify-between p-5">
+                    {/* Top: badge & discount pill */}
+                    <div className="flex items-center justify-between gap-2">
+                      {o.badge ? (
+                        <span className="flex items-center gap-1 rounded-full bg-gold px-2.5 py-1 text-[11px] font-black text-gold-foreground shadow-md">
+                          <Tag className="size-3" /> {o.badge}
+                        </span>
+                      ) : (
+                        <div />
+                      )}
+                      {savePct > 0 && (
+                        <span className="flex items-center gap-1 rounded-full bg-red-500 px-2.5 py-1 text-[11px] font-black text-white shadow-md">
+                          <Flame className="size-3" /> -{savePct}%
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Bottom: title + description + price + CTA */}
+                    <div className="space-y-2.5">
+                      <div>
+                        <h3 className="text-lg font-black leading-tight text-white drop-shadow-md line-clamp-1">
+                          {o.name}
+                        </h3>
+                        <p className="mt-0.5 text-xs text-white/80 line-clamp-1">
+                          {o.description}
+                        </p>
+                      </div>
+
+                      <div className="flex items-center justify-between gap-2 pt-1">
+                        {/* Dark blue price pill */}
+                        <div className="inline-flex items-center gap-2 rounded-xl bg-[#0a192f] px-3 py-1.5 border border-blue-400/25 shadow-md">
+                          <span className="text-lg font-black text-gold drop-shadow">
+                            {o.price} <span className="text-xs font-bold text-gold/80">ج.م</span>
+                          </span>
+                          {o.oldPrice && (
+                            <span className="text-xs text-slate-400 line-through">
+                              {o.oldPrice} ج.م
+                            </span>
+                          )}
+                        </div>
+
+                        <span className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 text-xs font-black text-brand shadow-lg transition-all group-hover:bg-gold group-hover:text-gold-foreground">
+                          اطلب الآن
+                          <ArrowLeft className="size-3 transition-transform group-hover:-translate-x-0.5" />
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <Button asChild variant="brand" className="mt-2 w-fit">
-                    <Link to="/menu">اطلب الآن</Link>
-                  </Button>
-                </div>
-              </div>
-            ))}
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* Down row: 2 cards */}
+          <div className="mt-5 grid gap-5 md:grid-cols-2">
+            {offers.slice(3, 5).map((o, idx) => {
+              const savePct = o.oldPrice
+                ? Math.round(((o.oldPrice - o.price) / o.oldPrice) * 100)
+                : 0;
+              return (
+                <Link
+                  key={o.id}
+                  to="/products/$id"
+                  params={{ id: o.id }}
+                  className="group relative flex h-56 overflow-hidden rounded-3xl shadow-[var(--shadow-card)] transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl md:h-64"
+                >
+                  {/* Full-bleed image */}
+                  <img
+                    src={o.image}
+                    alt={o.name}
+                    loading="lazy"
+                    width={900}
+                    height={600}
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+
+                  {/* Shimmer sweep on hover */}
+                  <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+
+                  {/* Gradient overlay */}
+                  <div
+                    className={`absolute inset-0 ${
+                      idx === 0
+                        ? "bg-gradient-to-r from-slate-950/95 via-slate-950/65 to-transparent"
+                        : "bg-gradient-to-l from-slate-950/95 via-slate-950/65 to-transparent"
+                    }`}
+                  />
+
+                  {/* Content */}
+                  <div
+                    className={`relative flex h-full w-full flex-col justify-between p-5 md:p-6 ${
+                      idx === 0 ? "items-start" : "items-end text-end"
+                    }`}
+                  >
+                    {/* Top: badge & discount pill */}
+                    <div className={`flex items-center gap-2 ${idx === 1 ? "flex-row-reverse" : ""}`}>
+                      {o.badge && (
+                        <span className="flex items-center gap-1 rounded-full bg-gold px-3 py-1 text-[11px] font-black text-gold-foreground shadow-md">
+                          <Tag className="size-3" /> {o.badge}
+                        </span>
+                      )}
+                      {savePct > 0 && (
+                        <span className="flex items-center gap-1 rounded-full bg-red-500 px-3 py-1 text-[11px] font-black text-white shadow-md">
+                          <Flame className="size-3" /> -{savePct}%
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Bottom: title + description + price + CTA */}
+                    <div className="space-y-2.5">
+                      <h3 className="text-xl font-black leading-tight text-white drop-shadow-lg md:text-2xl">
+                        {o.name}
+                      </h3>
+                      <p className="text-xs text-white/80 line-clamp-1 leading-relaxed">
+                        {o.description}
+                      </p>
+
+                      <div className={`flex flex-wrap items-center gap-3 ${idx === 1 ? "justify-end" : ""}`}>
+                        {/* Dark blue price pill */}
+                        <div className="inline-flex items-center gap-2 rounded-xl bg-[#0a192f] px-3.5 py-1.5 border border-blue-400/25 shadow-md">
+                          <span className="text-xl font-black text-gold drop-shadow">
+                            {o.price} <span className="text-xs font-bold text-gold/80">ج.م</span>
+                          </span>
+                          {o.oldPrice && (
+                            <span className="text-xs text-slate-400 line-through">
+                              {o.oldPrice} ج.م
+                            </span>
+                          )}
+                        </div>
+
+                        {o.oldPrice && (
+                          <span className="rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-bold text-white backdrop-blur-sm">
+                            وفر {o.oldPrice - o.price} ج.م
+                          </span>
+                        )}
+
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-xs font-black text-brand shadow-lg transition-all group-hover:bg-gold group-hover:text-gold-foreground">
+                          اطلب الآن
+                          <ArrowLeft className="size-3.5 transition-transform group-hover:-translate-x-0.5" />
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>

@@ -1,8 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Facebook, Instagram, Mail, MapPin, Phone } from "lucide-react";
 import { Logo } from "./Logo";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 const quickLinks = [
   { to: "/", label: "الرئيسية" },
@@ -17,12 +15,10 @@ const service = ["الأسئلة الشائعة", "سياسة التوصيل", "
 
 export function SiteFooter() {
   return (
-    <footer className="brand-gradient mt-16 text-brand-foreground">
-      <div className="container-page grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-4">
+    <footer className="brand-gradient mt-10 md:mt-12 text-brand-foreground">
+      <div className="container-page grid gap-8 py-8 md:py-10 md:grid-cols-2 lg:grid-cols-4">
         <div>
-          <span className="inline-block rounded-2xl bg-white px-3 py-1.5">
-            <Logo light />
-          </span>
+          <Logo light imgClassName="h-12 w-auto" />
           <p className="mt-4 text-sm leading-7 text-brand-foreground/80">
             وزير الحلو — أشهى الحلويات الشرقية والغربية والمأكولات الطازجة، محضّرة يومياً بأجود
             المكونات وبأسعار تناسب الجميع.
@@ -72,22 +68,6 @@ export function SiteFooter() {
               <MapPin className="size-4 text-gold" /> موقف الخصوص، مصر
             </li>
           </ul>
-          <form
-            className="mt-5 flex gap-2"
-            onSubmit={(e) => {
-              e.preventDefault();
-            }}
-          >
-            <Input
-              type="email"
-              required
-              placeholder="بريدك الإلكتروني"
-              className="h-10 border-white/25 bg-white/10 text-brand-foreground placeholder:text-brand-foreground/60"
-            />
-            <Button type="submit" variant="hero" className="h-10">
-              اشترك
-            </Button>
-          </form>
         </div>
       </div>
 

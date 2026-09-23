@@ -1,43 +1,62 @@
 import { Heart, Plus, Star } from "lucide-react";
-import { useState } from "react";
 import { toast } from "sonner";
+import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/cart";
+import { useWishlist } from "@/lib/wishlist";
 import type { Product } from "@/data/menu";
 
 export function ProductCard({ product }: { product: Product }) {
   const { add } = useCart();
-  const [fav, setFav] = useState(false);
+  const { has, toggle } = useWishlist();
+  const isFav = has(product.id);
 
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)] transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-float)]">
+      {/* Clickable image + badge + wishlist */}
       <div className="relative aspect-square overflow-hidden bg-muted">
-        <img
-          src={product.image}
-          alt={product.name}
-          loading="lazy"
-          width={816}
-          height={816}
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
+        <Link to="/products/$id" params={{ id: product.id }} aria-label={product.name} className="block h-full w-full">
+          <img
+            src={product.image}
+            alt={product.name}
+            loading="lazy"
+            width={816}
+            height={816}
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </Link>
         {product.badge && (
-          <span className="absolute top-3 start-3 rounded-full bg-primary px-3 py-1 text-[11px] font-bold text-primary-foreground shadow">
+          <span className="absolute top-3 start-3 rounded-full bg-primary px-3 py-1 text-[11px] font-bold text-primary-foreground shadow pointer-events-none">
             {product.badge}
           </span>
         )}
         <button
           type="button"
-          aria-label="أضف للمفضلة"
-          onClick={() => setFav((f) => !f)}
+          aria-label={isFav ? "إزالة من الأمنيات" : "أضف للأمنيات"}
+          onClick={() => {
+            toggle(product);
+            toast.success(
+              isFav
+                ? `تمت إزالة ${product.name} من الأمنيات`
+                : `تمت إضافة ${product.name} إلى الأمنيات ❤️`,
+            );
+          }}
           className="absolute top-3 end-3 grid size-9 place-items-center rounded-full bg-background/90 text-muted-foreground shadow transition-colors hover:text-primary"
         >
-          <Heart className={`size-4 ${fav ? "fill-primary text-primary" : ""}`} />
+          <Heart className={`size-4 transition-all ${isFav ? "fill-primary text-primary scale-110" : ""}`} />
         </button>
       </div>
 
+      {/* Info */}
       <div className="flex flex-1 flex-col gap-2 p-3 md:p-4">
-        <h3 className="text-base font-bold text-brand md:text-lg">{product.name}</h3>
-        <p className="hidden text-xs leading-6 text-muted-foreground sm:block">
+        <Link
+          to="/products/$id"
+          params={{ id: product.id }}
+          className="hover:text-primary transition-colors"
+        >
+          <h3 className="text-base font-bold text-brand md:text-lg">{product.name}</h3>
+        </Link>
+        <p className="hidden text-xs leading-6 text-muted-foreground sm:block line-clamp-2">
           {product.description}
         </p>
         <div className="flex items-center gap-1 text-xs text-muted-foreground">

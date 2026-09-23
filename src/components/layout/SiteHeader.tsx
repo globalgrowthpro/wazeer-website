@@ -1,11 +1,10 @@
-import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Facebook, Instagram, Mail, Menu, Phone, Search, ShoppingCart, User } from "lucide-react";
+import { Facebook, Heart, Instagram, Mail, Menu, Phone, ShoppingCart } from "lucide-react";
 import { Logo } from "./Logo";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useCart } from "@/lib/cart";
+import { useWishlist } from "@/lib/wishlist";
 import { useAuth } from "@/lib/auth";
 
 const navLinks = [
@@ -19,8 +18,8 @@ const navLinks = [
 
 export function SiteHeader() {
   const { count } = useCart();
+  const { count: wishCount } = useWishlist();
   const { user } = useAuth();
-  const [searchOpen, setSearchOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50">
@@ -39,17 +38,6 @@ export function SiteHeader() {
             </span>
           </div>
           <div className="flex items-center gap-4">
-            <Link to="/admin" className="hover:text-gold">
-              لوحة الإدارة
-            </Link>
-            <Link to="/driver" className="hover:text-gold">
-              لوحة المندوب
-            </Link>
-            <span className="opacity-50">|</span>
-            <Link to="/cart" className="hover:text-gold">
-              السلة ({count})
-            </Link>
-            <span className="opacity-50">|</span>
             {user ? (
               <Link to="/account" className="hover:text-gold">
                 حسابي ({user.name})
@@ -109,13 +97,15 @@ export function SiteHeader() {
           </nav>
 
           <div className="flex items-center gap-1">
-            <Button
-              variant="ghost"
-              size="icon"
-              aria-label="بحث"
-              onClick={() => setSearchOpen((o) => !o)}
-            >
-              <Search />
+            <Button variant="ghost" size="icon" asChild aria-label="قائمة الأمنيات">
+              <Link to="/wishlist" className="relative">
+                <Heart className={wishCount > 0 ? "fill-primary text-primary" : ""} />
+                {wishCount > 0 && (
+                  <span className="absolute -top-0.5 end-0 grid h-4 min-w-4 place-items-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
+                    {wishCount}
+                  </span>
+                )}
+              </Link>
             </Button>
             <Button variant="ghost" size="icon" asChild aria-label="السلة">
               <Link to="/cart" className="relative">
@@ -127,24 +117,9 @@ export function SiteHeader() {
                 )}
               </Link>
             </Button>
-            <Button variant="ghost" size="icon" className="hidden sm:inline-flex" asChild aria-label="حسابي">
-              <Link to={user ? "/account" : "/auth"}>
-                <User />
-              </Link>
-            </Button>
-            <Button asChild variant="hero" className="hidden sm:inline-flex" size="default">
-              <Link to="/menu">اطلب الآن</Link>
-            </Button>
           </div>
         </div>
 
-        {searchOpen && (
-          <div className="border-t border-border bg-background">
-            <div className="container-page py-3">
-              <Input placeholder="ابحث عن قشطوطة، كيك، آيس كريم..." className="h-11" />
-            </div>
-          </div>
-        )}
       </div>
     </header>
   );

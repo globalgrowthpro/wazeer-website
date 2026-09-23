@@ -1,14 +1,25 @@
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
-import emblemAsset from "@/assets/wazeer-emblem.png.asset.json";
+import emblemDark from "@/assets/wazeer-emblem.png";
+import emblemLight from "@/assets/wazeer-emblem-light.png";
 
-export function Logo({ light = false, className }: { light?: boolean; className?: string }) {
+interface LogoProps {
+  light?: boolean;
+  className?: string;
+  imgClassName?: string;
+}
+
+export function Logo({ light = false, className, imgClassName }: LogoProps) {
   return (
-    <Link to="/" className={cn("flex items-center", className)} aria-label="وزير الحلو">
+    <Link
+      to="/"
+      className={cn("inline-flex items-center transition-opacity hover:opacity-90", className)}
+      aria-label="وزير الحلو"
+    >
       <img
-        src={emblemAsset.url}
+        src={light ? emblemLight : emblemDark}
         alt={light ? "وزير الحلو" : "وزير الحلو - Wazeer ElHelw"}
-        className="h-11 w-auto object-contain"
+        className={cn("h-11 w-auto object-contain", imgClassName)}
         loading="eager"
       />
     </Link>

@@ -7,6 +7,8 @@ export interface DemoUser {
   phone: string;
   email: string;
   role: Role;
+  city?: string | undefined;
+  district?: string | undefined;
 }
 
 interface AuthValue {
