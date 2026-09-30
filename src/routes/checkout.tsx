@@ -32,6 +32,11 @@ function CheckoutPage() {
   const [step, setStep] = useState(0);
   const [type, setType] = useState("delivery");
   const [payment, setPayment] = useState("cod");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [notes, setNotes] = useState("");
+  const [address, setAddress] = useState("");
+  const [branch, setBranch] = useState("الخصوص");
   const fee = type === "delivery" ? DELIVERY_FEE : 0;
   const total = subtotal + fee;
   const orderId = "WZ-10249";
@@ -43,9 +48,17 @@ function CheckoutPage() {
     type: string;
     payment: string;
     date: string;
+    name: string;
+    phone: string;
+    address: string;
+    notes: string;
   } | null>(null);
 
   const next = () => {
+    if (step === 0 && (!name.trim() || !phone.trim())) {
+      toast.error("من فضلك اكتب الاسم ورقم الهاتف");
+      return;
+    }
     if (step === 2) {
       setInvoice({
         items,
@@ -59,6 +72,13 @@ function CheckoutPage() {
           month: "long",
           year: "numeric",
         }),
+        name: name.trim(),
+        phone: phone.trim(),
+        address:
+          type === "delivery"
+            ? address.trim() || "—"
+            : `استلام من فرع ${branch}`,
+        notes: notes.trim(),
       });
       clear();
       toast.success("تم استلام طلبك بنجاح");
@@ -148,6 +168,34 @@ function CheckoutPage() {
                     </div>
                   </div>
 
+                  {/* Customer info */}
+                  <div className="mt-6 rounded-2xl border border-dashed border-border p-4">
+                    <p className="mb-3 text-xs font-bold text-primary">بيانات العميل</p>
+                    <div className="grid gap-3 text-sm sm:grid-cols-3">
+                      <div>
+                        <p className="text-xs text-muted-foreground">الاسم</p>
+                        <p className="mt-0.5 font-bold text-brand">{invoice?.name}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">رقم الهاتف</p>
+                        <p dir="ltr" className="mt-0.5 text-start font-bold text-brand">
+                          {invoice?.phone}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">
+                          {invoice?.type === "delivery" ? "عنوان التوصيل" : "الفرع"}
+                        </p>
+                        <p className="mt-0.5 font-bold text-brand">{invoice?.address}</p>
+                      </div>
+                    </div>
+                    {invoice?.notes ? (
+                      <p className="mt-3 border-t border-dashed border-border pt-3 text-xs text-muted-foreground">
+                        ملاحظات: {invoice.notes}
+                      </p>
+                    ) : null}
+                  </div>
+
                   {/* Items table */}
                   <table className="mt-6 w-full text-sm">
                     <thead>
@@ -217,15 +265,34 @@ function CheckoutPage() {
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
                       <Label htmlFor="cname">الاسم</Label>
-                      <Input id="cname" placeholder="اكتب اسمك" />
+                      <Input
+                        id="cname"
+                        placeholder="اكتب اسمك"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="cphone">رقم الهاتف</Label>
-                      <Input id="cphone" dir="ltr" placeholder="+20 1XX XXX XXXX" />
+                      <Input
+                        id="cphone"
+                        dir="ltr"
+                        placeholder="+20 1XX XXX XXXX"
+                        inputMode="tel"
+                        maxLength={20}
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                      />
                     </div>
                     <div className="space-y-2 sm:col-span-2">
                       <Label htmlFor="cnotes">ملاحظات للطلب</Label>
-                      <Textarea id="cnotes" placeholder="مثال: بدون مكسرات" />
+                      <Textarea
+                        id="cnotes"
+                        placeholder="مثال: بدون مكسرات"
+                        maxLength={500}
+                        value={notes}
+                        onChange={(e) => setNotes(e.target.value)}
+                      />
                     </div>
                   </div>
                 )}
@@ -252,19 +319,31 @@ function CheckoutPage() {
                     {type === "delivery" ? (
                       <div className="space-y-2">
                         <Label htmlFor="addr">العنوان بالتفصيل</Label>
-                        <Textarea id="addr" placeholder="المنطقة، الشارع، رقم العقار، الدور" />
+                        <Textarea
+                          id="addr"
+                          placeholder="المنطقة، الشارع، رقم العقار، الدور"
+                          maxLength={300}
+                          value={address}
+                          onChange={(e) => setAddress(e.target.value)}
+                        />
                       </div>
                     ) : (
                       <div className="space-y-2">
                         <Label>اختر الفرع</Label>
                         <div className="grid gap-2 sm:grid-cols-3">
                           {["الخصوص", "شبرا", "المرج"].map((b) => (
-                            <span
+                            <button
                               key={b}
-                              className="rounded-xl border border-border p-3 text-center text-sm font-semibold text-brand"
+                              type="button"
+                              onClick={() => setBranch(b)}
+                              className={`rounded-xl border p-3 text-center text-sm font-semibold transition-colors ${
+                                branch === b
+                                  ? "border-primary bg-primary/10 text-primary"
+                                  : "border-border text-brand"
+                              }`}
                             >
                               {b}
-                            </span>
+                            </button>
                           ))}
                         </div>
                       </div>
