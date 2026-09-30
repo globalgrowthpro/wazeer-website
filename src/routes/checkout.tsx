@@ -108,8 +108,13 @@ function CheckoutPage() {
                 {/* Invoice header */}
                 <div className="brand-gradient px-6 py-5 text-primary-foreground">
                   <div className="flex flex-wrap items-center justify-between gap-3">
-                    <div>
-                      <p className="text-lg font-extrabold">وزير الحلو</p>
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={emblemLight}
+                        alt="وزير الحلو"
+                        className="h-12 w-auto object-contain"
+                        loading="eager"
+                      />
                       <p className="text-xs opacity-80">فاتورة طلب</p>
                     </div>
                     <div className="text-end text-xs leading-5 opacity-90">
