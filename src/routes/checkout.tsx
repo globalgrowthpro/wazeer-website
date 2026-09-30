@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Printer } from "lucide-react";
 import { toast } from "sonner";
 import { PageHero } from "@/components/PageHero";
 import { Button } from "@/components/ui/button";
@@ -34,14 +34,43 @@ function CheckoutPage() {
   const fee = type === "delivery" ? DELIVERY_FEE : 0;
   const total = subtotal + fee;
   const orderId = "WZ-10249";
+  const [invoice, setInvoice] = useState<{
+    items: typeof items;
+    subtotal: number;
+    fee: number;
+    total: number;
+    type: string;
+    payment: string;
+    date: string;
+  } | null>(null);
 
   const next = () => {
     if (step === 2) {
+      setInvoice({
+        items,
+        subtotal,
+        fee,
+        total,
+        type,
+        payment,
+        date: new Date().toLocaleDateString("ar-EG", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        }),
+      });
       clear();
       toast.success("تم استلام طلبك بنجاح");
     }
     setStep((s) => Math.min(s + 1, 3));
   };
+
+  const paymentLabel =
+    invoice?.payment === "cod"
+      ? "الدفع عند الاستلام"
+      : invoice?.payment === "wallet"
+        ? "محفظة إلكترونية"
+        : "بطاقة بنكية";
 
   return (
     <>
