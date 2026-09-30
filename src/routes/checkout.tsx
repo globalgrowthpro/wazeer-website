@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useCart } from "@/lib/cart";
 import { DELIVERY_FEE } from "@/data/orders";
+import emblemLight from "@/assets/wazeer-emblem-light.png";
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({
