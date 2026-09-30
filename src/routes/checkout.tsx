@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Printer } from "lucide-react";
 import { toast } from "sonner";
 import { PageHero } from "@/components/PageHero";
 import { Button } from "@/components/ui/button";
@@ -34,14 +34,43 @@ function CheckoutPage() {
   const fee = type === "delivery" ? DELIVERY_FEE : 0;
   const total = subtotal + fee;
   const orderId = "WZ-10249";
+  const [invoice, setInvoice] = useState<{
+    items: typeof items;
+    subtotal: number;
+    fee: number;
+    total: number;
+    type: string;
+    payment: string;
+    date: string;
+  } | null>(null);
 
   const next = () => {
     if (step === 2) {
+      setInvoice({
+        items,
+        subtotal,
+        fee,
+        total,
+        type,
+        payment,
+        date: new Date().toLocaleDateString("ar-EG", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        }),
+      });
       clear();
       toast.success("تم استلام طلبك بنجاح");
     }
     setStep((s) => Math.min(s + 1, 3));
   };
+
+  const paymentLabel =
+    invoice?.payment === "cod"
+      ? "الدفع عند الاستلام"
+      : invoice?.payment === "wallet"
+        ? "محفظة إلكترونية"
+        : "بطاقة بنكية";
 
   return (
     <>
@@ -65,18 +94,110 @@ function CheckoutPage() {
           </ol>
 
           {step === 3 ? (
-            <div className="mx-auto max-w-md rounded-3xl border border-border bg-card p-8 text-center shadow-[var(--shadow-card)]">
-              <CheckCircle2 className="mx-auto size-14 text-fresh" />
-              <h2 className="mt-4 text-xl font-bold text-brand">تم تأكيد طلبك</h2>
-              <p className="mt-2 text-sm text-muted-foreground">
-                رقم الطلب <span dir="ltr">{orderId}</span> — سنتواصل معك لتأكيد العنوان.
-              </p>
+            <div className="mx-auto max-w-2xl">
+              <div className="mb-6 flex items-center justify-center gap-3 text-center">
+                <CheckCircle2 className="size-8 text-fresh" />
+                <div className="text-start">
+                  <h2 className="text-xl font-bold text-brand">تم تأكيد طلبك بنجاح</h2>
+                  <p className="text-sm text-muted-foreground">سنتواصل معك لتأكيد العنوان قبل التجهيز.</p>
+                </div>
+              </div>
+
+              {/* Invoice */}
+              <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
+                {/* Invoice header */}
+                <div className="brand-gradient px-6 py-5 text-primary-foreground">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <p className="text-lg font-extrabold">وزير الحلو</p>
+                      <p className="text-xs opacity-80">فاتورة طلب</p>
+                    </div>
+                    <div className="text-end text-xs leading-5 opacity-90">
+                      <p>
+                        رقم الفاتورة: <span dir="ltr" className="font-bold">{orderId}</span>
+                      </p>
+                      <p>التاريخ: {invoice?.date}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-6">
+                  {/* Meta */}
+                  <div className="grid gap-3 sm:grid-cols-3">
+                    <div className="rounded-2xl bg-muted/50 p-3 text-center">
+                      <p className="text-xs text-muted-foreground">طريقة الاستلام</p>
+                      <p className="mt-1 text-sm font-bold text-brand">
+                        {invoice?.type === "delivery" ? "توصيل للمنزل" : "استلام من الفرع"}
+                      </p>
+                    </div>
+                    <div className="rounded-2xl bg-muted/50 p-3 text-center">
+                      <p className="text-xs text-muted-foreground">طريقة الدفع</p>
+                      <p className="mt-1 text-sm font-bold text-brand">{paymentLabel}</p>
+                    </div>
+                    <div className="rounded-2xl bg-muted/50 p-3 text-center">
+                      <p className="text-xs text-muted-foreground">حالة الطلب</p>
+                      <p className="mt-1 inline-flex items-center gap-1 rounded-full bg-gold/20 px-3 py-0.5 text-xs font-bold text-gold-foreground">
+                        قيد التجهيز
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Items table */}
+                  <table className="mt-6 w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-border text-xs text-muted-foreground">
+                        <th className="pb-2 text-start font-semibold">الصنف</th>
+                        <th className="pb-2 text-center font-semibold">الكمية</th>
+                        <th className="pb-2 text-center font-semibold">السعر</th>
+                        <th className="pb-2 text-end font-semibold">الإجمالي</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {invoice?.items.map((i) => (
+                        <tr key={i.id} className="border-b border-dashed border-border">
+                          <td className="py-3 font-semibold text-brand">{i.name}</td>
+                          <td className="py-3 text-center text-muted-foreground">{i.qty}</td>
+                          <td className="py-3 text-center text-muted-foreground">{i.price} ج.م</td>
+                          <td className="py-3 text-end font-bold text-brand">{i.qty * i.price} ج.م</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+
+                  {/* Totals */}
+                  <div className="mt-4 space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">المجموع الفرعي</span>
+                      <span className="font-semibold">{invoice?.subtotal} ج.م</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">رسوم التوصيل</span>
+                      <span className="font-semibold">
+                        {invoice?.fee ? `${invoice.fee} ج.م` : "مجانًا"}
+                      </span>
+                    </div>
+                    <div className="flex justify-between rounded-2xl bg-primary/10 px-4 py-3 text-base font-extrabold text-primary">
+                      <span>الإجمالي المستحق</span>
+                      <span>{invoice?.total} ج.م</span>
+                    </div>
+                  </div>
+
+                  <p className="mt-6 border-t border-dashed border-border pt-4 text-center text-xs text-muted-foreground">
+                    شكرًا لطلبك من وزير الحلو — حلويات تليق بالوزرا 🍰
+                  </p>
+                </div>
+              </div>
+
               <div className="mt-6 flex flex-wrap justify-center gap-3">
                 <Button
                   variant="hero"
                   onClick={() => navigate({ to: "/orders/$id", params: { id: orderId } })}
                 >
                   تتبع الطلب
+                </Button>
+                <Button variant="outline" onClick={() => window.print()}>
+                  <Printer className="size-4" />
+                  طباعة الفاتورة
                 </Button>
                 <Button asChild variant="outline">
                   <Link to="/menu">مواصلة التسوق</Link>
