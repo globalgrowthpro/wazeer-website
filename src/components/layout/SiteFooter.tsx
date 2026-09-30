@@ -6,7 +6,6 @@ const quickLinks = [
   { to: "/", label: "الرئيسية" },
   { to: "/about", label: "من نحن" },
   { to: "/menu", label: "القائمة" },
-  { to: "/pos", label: "نقاط البيع" },
   { to: "/gallery", label: "معرض الصور" },
   { to: "/contact", label: "تواصل معنا" },
 ] as const;

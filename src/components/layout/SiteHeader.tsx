@@ -11,7 +11,6 @@ const navLinks = [
   { to: "/", label: "الرئيسية" },
   { to: "/menu", label: "القائمة" },
   { to: "/about", label: "من نحن" },
-  { to: "/pos", label: "نقاط البيع" },
   { to: "/gallery", label: "معرض الصور" },
   { to: "/contact", label: "تواصل معنا" },
 ] as const;
