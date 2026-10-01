@@ -215,6 +215,7 @@ function AdminLayout() {
               </div>
             )}
           </div>
+          </div>
         </header>
 
         <div className="mx-auto min-w-0 max-w-[1500px] p-4 md:p-7">
