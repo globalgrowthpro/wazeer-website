@@ -5,6 +5,8 @@ import {
   ChevronUp,
   Clock,
   Filter,
+  LayoutGrid,
+  List,
   Package,
   Pencil,
   Plus,
@@ -15,6 +17,14 @@ import {
   Users,
   X,
 } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -83,6 +93,7 @@ function AdminProducts() {
   const [hidden, setHidden] = useState<string[]>([]);
   const [q, setQ] = useState("");
   const [selectedCat, setSelectedCat] = useState<string>("all");
+  const [view, setView] = useState<"table" | "cards">("table");
 
   // Modal
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -259,9 +270,25 @@ function AdminProducts() {
             {list.length} صنف متوفر في قائمة طعام وزير الحلو
           </p>
         </div>
-        <Button variant="hero" onClick={openAddModal}>
-          <Plus className="size-4" /> إضافة صنف جديد
-        </Button>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 rounded-xl border border-border bg-card p-1 shadow-sm">
+            <button
+              onClick={() => setView("table")}
+              className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-colors ${view === "table" ? "bg-brand text-brand-foreground" : "text-muted-foreground hover:bg-muted"}`}
+            >
+              <List className="size-3.5" /> جدول
+            </button>
+            <button
+              onClick={() => setView("cards")}
+              className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-colors ${view === "cards" ? "bg-brand text-brand-foreground" : "text-muted-foreground hover:bg-muted"}`}
+            >
+              <LayoutGrid className="size-3.5" /> بطاقات
+            </button>
+          </div>
+          <Button variant="hero" onClick={openAddModal}>
+            <Plus className="size-4" /> إضافة صنف جديد
+          </Button>
+        </div>
       </div>
 
       {/* Filters */}
@@ -296,8 +323,104 @@ function AdminProducts() {
       </div>
 
       {/* Product list */}
-      <div className="space-y-3">
-        {filtered.map((p) => (
+      {view === "table" ? (
+        <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)]">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-muted/40 hover:bg-muted/40">
+                  <TableHead className="text-right font-extrabold">المنتج</TableHead>
+                  <TableHead className="text-right font-extrabold">القسم</TableHead>
+                  <TableHead className="text-right font-extrabold">السعر</TableHead>
+                  <TableHead className="text-center font-extrabold">الحالة</TableHead>
+                  <TableHead className="text-center font-extrabold">إجراءات</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filtered.map((p) => (
+                  <TableRow key={p.id} className="transition-colors hover:bg-muted/30">
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        <img src={p.image} alt={p.name} loading="lazy" className="size-11 rounded-lg object-cover" />
+                        <div className="min-w-0">
+                          <div className="flex flex-wrap items-center gap-1.5">
+                            <span className="font-bold text-brand">{p.name}</span>
+                            {p.badge && (
+                              <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-extrabold text-primary">
+                                {p.badge}
+                              </span>
+                            )}
+                            {p.popular && (
+                              <span className="rounded bg-gold/20 px-1.5 py-0.5 text-[10px] font-extrabold text-amber-700">
+                                ⭐ الأكثر طلباً
+                              </span>
+                            )}
+                          </div>
+                          <p className="mt-0.5 max-w-xs truncate text-xs text-muted-foreground">{p.description}</p>
+                          <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                            {p.sizePricing && p.sizePricing.length > 0 && (
+                              <span className="rounded bg-purple-50 px-1.5 py-0.5 text-[10px] font-semibold text-purple-700">
+                                {p.sizePricing.length} أحجام
+                              </span>
+                            )}
+                            {p.ingredients && p.ingredients.length > 0 && (
+                              <span className="rounded bg-emerald-50 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-700">
+                                {p.ingredients.length} مكونات
+                              </span>
+                            )}
+                            {p.nutrition && (
+                              <span className="rounded bg-orange-50 px-1.5 py-0.5 text-[10px] font-semibold text-orange-700">
+                                قيمة غذائية
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap text-xs">{categoryName(p.category)}</TableCell>
+                    <TableCell className="whitespace-nowrap">
+                      <div className="font-extrabold text-primary">{p.price} ج.م</div>
+                      {p.oldPrice && (
+                        <div className="text-xs text-muted-foreground line-through">{p.oldPrice} ج.م</div>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center justify-center gap-2">
+                        <Switch
+                          checked={!hidden.includes(p.id)}
+                          onCheckedChange={(on) =>
+                            setHidden((h) => (on ? h.filter((i) => i !== p.id) : [...h, p.id]))
+                          }
+                        />
+                        <span className="w-10 text-xs text-muted-foreground">
+                          {hidden.includes(p.id) ? "مخفي" : "نشط"}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center justify-center gap-1">
+                        <Button variant="ghost" size="icon" onClick={() => openEditModal(p)} title="تعديل">
+                          <Pencil className="size-4" />
+                        </Button>
+                        <Button variant="ghost" size="icon" onClick={() => handleDelete(p.id)} title="حذف">
+                          <Trash2 className="size-4 text-primary" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+          {filtered.length === 0 && (
+            <div className="border-t border-border p-8 text-center text-muted-foreground">
+              لا توجد أصناف مطابقة لمعايير البحث
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {filtered.map((p) => (
           <div
             key={p.id}
             className="flex flex-wrap items-center gap-4 rounded-2xl border border-border bg-card p-3 shadow-[var(--shadow-card)] transition-all hover:border-primary/30"
@@ -378,7 +501,8 @@ function AdminProducts() {
             لا توجد أصناف مطابقة لمعايير البحث
           </div>
         )}
-      </div>
+        </div>
+      )}
 
       {/* ── Add / Edit Dialog ─────────────────────────────────────────────────── */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
