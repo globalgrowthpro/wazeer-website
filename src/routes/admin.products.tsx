@@ -501,7 +501,8 @@ function AdminProducts() {
             لا توجد أصناف مطابقة لمعايير البحث
           </div>
         )}
-      </div>
+        </div>
+      )}
 
       {/* ── Add / Edit Dialog ─────────────────────────────────────────────────── */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
