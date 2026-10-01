@@ -5,6 +5,8 @@ import {
   ChevronUp,
   Clock,
   Filter,
+  LayoutGrid,
+  List,
   Package,
   Pencil,
   Plus,
@@ -15,6 +17,14 @@ import {
   Users,
   X,
 } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -83,6 +93,7 @@ function AdminProducts() {
   const [hidden, setHidden] = useState<string[]>([]);
   const [q, setQ] = useState("");
   const [selectedCat, setSelectedCat] = useState<string>("all");
+  const [view, setView] = useState<"table" | "cards">("table");
 
   // Modal
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -259,9 +270,25 @@ function AdminProducts() {
             {list.length} صنف متوفر في قائمة طعام وزير الحلو
           </p>
         </div>
-        <Button variant="hero" onClick={openAddModal}>
-          <Plus className="size-4" /> إضافة صنف جديد
-        </Button>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 rounded-xl border border-border bg-card p-1 shadow-sm">
+            <button
+              onClick={() => setView("table")}
+              className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-colors ${view === "table" ? "bg-brand text-brand-foreground" : "text-muted-foreground hover:bg-muted"}`}
+            >
+              <List className="size-3.5" /> جدول
+            </button>
+            <button
+              onClick={() => setView("cards")}
+              className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-colors ${view === "cards" ? "bg-brand text-brand-foreground" : "text-muted-foreground hover:bg-muted"}`}
+            >
+              <LayoutGrid className="size-3.5" /> بطاقات
+            </button>
+          </div>
+          <Button variant="hero" onClick={openAddModal}>
+            <Plus className="size-4" /> إضافة صنف جديد
+          </Button>
+        </div>
       </div>
 
       {/* Filters */}
