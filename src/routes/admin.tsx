@@ -85,6 +85,18 @@ function AdminLayout() {
   const [navQuery, setNavQuery] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const searchField = (
+    <div className="relative order-3 w-full md:order-none md:mx-4 md:max-w-sm md:flex-1">
+      <Search className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+      <input
+        value={navQuery}
+        onChange={(event) => setNavQuery(event.target.value)}
+        placeholder="ابحث في الإدارة..."
+        aria-label="البحث في أقسام الإدارة"
+        className="h-10 w-full rounded-md border border-border bg-muted/60 pr-9 pl-3 text-xs text-foreground outline-none placeholder:text-muted-foreground/70 focus:border-ring focus:bg-background"
+      />
+    </div>
+  );
   const filteredGroups = navGroups
     .map((group) => ({
       ...group,
@@ -124,20 +136,7 @@ function AdminLayout() {
           </Button>
         </div>
 
-        <div className="px-4 pt-4">
-          <div className="relative">
-            <Search className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-sidebar-foreground/55" />
-            <input
-              value={navQuery}
-              onChange={(event) => setNavQuery(event.target.value)}
-              placeholder="ابحث في الإدارة..."
-              aria-label="البحث في أقسام الإدارة"
-              className="h-10 w-full rounded-md border border-sidebar-border bg-sidebar-accent/70 pr-9 pl-3 text-xs text-sidebar-foreground outline-none placeholder:text-sidebar-foreground/45 focus:border-sidebar-ring"
-            />
-          </div>
-        </div>
-
-        <div className="no-scrollbar flex-1 space-y-5 overflow-y-auto p-4">
+        <div className="no-scrollbar flex-1 space-y-5 overflow-y-auto p-4 pt-6">
             {filteredGroups.map((group) => (
               <div key={group.title}>
                 <p className="mb-1.5 px-2.5 text-[11px] font-bold text-sidebar-foreground/50">
