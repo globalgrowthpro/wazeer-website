@@ -179,7 +179,8 @@ function AdminLayout() {
       </aside>
 
       <main className="min-w-0 flex-1">
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-background/95 px-4 backdrop-blur md:px-7">
+        <header className="sticky top-0 z-30 border-b border-border bg-background/95 px-4 py-3 backdrop-blur md:px-7 md:py-0">
+          <div className="flex flex-wrap items-center justify-between gap-3 md:h-16 md:flex-nowrap">
           <div className="flex items-center gap-3">
             <Button variant="outline" size="icon" className="lg:hidden" onClick={() => setSidebarOpen(true)} aria-label="فتح القائمة">
               <Menu />
@@ -189,6 +190,7 @@ function AdminLayout() {
               <p className="hidden text-[11px] text-muted-foreground sm:block">الخميس، 1 أكتوبر 2026</p>
             </div>
           </div>
+          {searchField}
           <div className="relative flex items-center gap-2">
             <Button
               variant="ghost"
