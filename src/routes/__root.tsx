@@ -4,8 +4,10 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
+  type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
@@ -42,11 +44,12 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
+    const normalizedError = error instanceof Error ? error : new Error(String(error));
+    reportLovableError(normalizedError, { boundary: "tanstack_root_error_component" });
   }, [error]);
 
   return (
@@ -135,6 +138,9 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const isStandalonePanel =
+    pathname === "/account" || pathname === "/driver" || pathname.startsWith("/admin");
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -142,14 +148,18 @@ function RootComponent() {
         <WishlistProvider>
           <CartProvider>
             <div className="flex min-h-screen flex-col">
-              <SiteHeader />
-              <main className="flex-1 pb-20 lg:pb-0">
+              {!isStandalonePanel && <SiteHeader />}
+              <main className={isStandalonePanel ? "flex-1" : "flex-1 pb-20 lg:pb-0"}>
                 {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
                 <Outlet />
               </main>
-              <SiteFooter />
-              <BottomNav />
-              <StickyContactWidget />
+              {!isStandalonePanel && (
+                <>
+                  <SiteFooter />
+                  <BottomNav />
+                  <StickyContactWidget />
+                </>
+              )}
             </div>
             <Toaster position="top-center" richColors />
           </CartProvider>
